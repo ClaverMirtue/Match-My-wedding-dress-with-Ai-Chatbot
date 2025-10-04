@@ -1,0 +1,487 @@
+{% extends 'shopapp/base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="checkout-container">
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-lg-4 order-lg-2 mb-4">
+            <div class="order-summary" data-aos="fade-left">
+                <h3 class="summary-title">Order Summary</h3>
+                <div class="cart-items">
+                    {% for item in cart_items %}
+                    <div class="cart-item">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
+                        <div class="item-details">
+                            <h5>{{ item.product.name }}</h5>
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p class="item-price">Rs. {{ item.product.price|multiply:item.quantity }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="summary-details">
+                    <div class="summary-item">
+                        <span>Subtotal</span>
+                        <span>Rs. {{ total }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total</span>
+                        <span>Rs. {{ total }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="col-lg-8 order-lg-1">
+            <div class="checkout-form" data-aos="fade-right">
+                <h2 class="checkout-title">Checkout</h2>
+                <form method="post" id="checkout-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Shipping Information -->
+                    <div class="form-section">
+                        <h4>Shipping Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="full_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" name="phone" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Delivery Address</label>
+                            <textarea class="form-control" name="address" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-section">
+                        <h4>Payment Method</h4>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <input type="radio" name="payment_method" id="cod" value="cod" checked>
+                                <label for="cod">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    Cash on Delivery
+                                </label>
+                            </div>
+                            <div class="payment-method">
+                                <input type="radio" name="payment_method" id="jazzcash" value="jazzcash">
+                                <label for="jazzcash">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    JazzCash
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- JazzCash Fields (Hidden by default) -->
+                        <div id="jazzcash-details" class="payment-details" style="display: none;">
+                            <div class="jazzcash-container">
+                                <div class="jazzcash-header">
+                                    <img src="https://upload.wikimedia.org/wikipedia/en/b/b4/JazzCash_logo.png" alt="JazzCash Logo" class="jazzcash-logo">
+                                    <h5>Pay with JazzCash</h5>
+                                </div>
+                                
+                                <div class="jazzcash-info">
+                                    <div class="jazzcash-number-display">
+                                        <span class="label">Send payment to:</span>
+                                        <div class="number">
+                                            <span id="jazzcash-merchant-number">0320-0340558</span>
+                                            <button type="button" class="copy-btn" onclick="copyJazzcashNumber()">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                        <span class="merchant-name">Merchant: ShopApp Official</span>
+                                    </div>
+                                    
+                                    <div class="payment-steps">
+                                        <h6><i class="fas fa-info-circle"></i> How to pay:</h6>
+                                        <ol>
+                                            <li>Open your JazzCash mobile app</li>
+                                            <li>Select "Send Money" option</li>
+                                            <li>Enter the number shown above</li>
+                                            <li>Enter amount: Rs. {{ total }}</li>
+                                            <li>Complete the transaction</li>
+                                            <li>Take a screenshot of payment confirmation</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-verification">
+                                    <h6>Verify your payment</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">Your JazzCash Number</label>
+                                        <input type="tel" class="form-control" name="jazzcash_number" placeholder="03XX-XXXXXXX" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Transaction ID</label>
+                                        <input type="text" class="form-control" name="transaction_id" placeholder="Enter transaction ID from SMS" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Payment Screenshot (optional)</label>
+                                        <input type="file" class="form-control" name="payment_screenshot" accept="image/*">
+                                        <div class="form-text">Upload a screenshot of your payment confirmation</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 place-order-btn">
+                        <i class="fas fa-lock me-2"></i>Place Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .checkout-container {
+        padding: 2rem 0;
+    }
+
+    .checkout-title {
+        margin-bottom: 2rem;
+        color: var(--dark-color);
+    }
+
+    /* Form Styling */
+    .checkout-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .form-section h4 {
+        margin-bottom: 1.5rem;
+        color: var(--dark-color);
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 0.8rem;
+        border: 2px solid #eee;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(255,75,145,0.25);
+    }
+
+    /* Payment Methods Styling */
+    .payment-methods {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .payment-method {
+        position: relative;
+        padding: 1rem;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .payment-method:hover {
+        border-color: var(--primary-color);
+    }
+
+    .payment-method input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .payment-method label {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .payment-method label i {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        color: var(--primary-color);
+    }
+
+    .payment-method input:checked + label {
+        color: var(--primary-color);
+    }
+
+    .payment-method input:checked + label i {
+        animation: pulse 0.5s;
+    }
+
+    /* Order Summary Styling */
+    .order-summary {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 2rem;
+    }
+
+    .summary-title {
+        margin-bottom: 1.5rem;
+        color: var(--dark-color);
+    }
+
+    .cart-items {
+        margin-bottom: 1.5rem;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .item-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-right: 1rem;
+    }
+
+    .item-details h5 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .item-price {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .summary-details {
+        margin-top: 1.5rem;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0;
+    }
+
+    .summary-item.total {
+        border-top: 2px solid #eee;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    /* Button Styling */
+    .place-order-btn {
+        padding: 1rem;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+
+    .place-order-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255,75,145,0.3);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    /* JazzCash Specific Styling */
+    .jazzcash-container {
+        background: linear-gradient(to right, #f9f9f9, #f0f0f0);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .jazzcash-header {
+        background: linear-gradient(to right, #9e1f63, #d4145a);
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .jazzcash-header h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .jazzcash-logo {
+        height: 40px;
+        background: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .jazzcash-info {
+        padding: 20px;
+        border-bottom: 1px dashed #ddd;
+    }
+
+    .jazzcash-number-display {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+
+    .jazzcash-number-display .label {
+        display: block;
+        margin-bottom: 8px;
+        color: #666;
+    }
+
+    .jazzcash-number-display .number {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f8f9fa;
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        margin-bottom: 8px;
+    }
+
+    .jazzcash-number-display .number span {
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: #d4145a;
+    }
+
+    .copy-btn {
+        background: transparent;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+        color: #d4145a;
+    }
+
+    .merchant-name {
+        display: block;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .payment-steps {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #d4145a;
+    }
+
+    .payment-steps h6 {
+        color: #d4145a;
+        margin-bottom: 10px;
+    }
+
+    .payment-steps ol {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+
+    .payment-steps li {
+        margin-bottom: 5px;
+    }
+
+    .payment-verification {
+        padding: 20px;
+    }
+
+    .payment-verification h6 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+    const jazzcashDetails = document.getElementById('jazzcash-details');
+
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', function() {
+            if (this.value === 'jazzcash') {
+                jazzcashDetails.style.display = 'block';
+            } else {
+                jazzcashDetails.style.display = 'none';
+            }
+        });
+    });
+
+    // Form validation
+    const checkoutForm = document.getElementById('checkout-form');
+    checkoutForm.addEventListener('submit', function(e) {
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        if (paymentMethod === 'jazzcash') {
+            const jazzcashNumber = document.querySelector('input[name="jazzcash_number"]').value;
+            const transactionId = document.querySelector('input[name="transaction_id"]').value;
+            
+            if (!jazzcashNumber || !transactionId) {
+                e.preventDefault();
+                alert('Please enter your JazzCash number and transaction ID');
+            }
+        }
+    });
+});
+
+function copyJazzcashNumber() {
+    const number = document.getElementById('jazzcash-merchant-number').textContent;
+    navigator.clipboard.writeText(number).then(() => {
+        // Show a temporary "Copied!" message
+        const copyBtn = document.querySelector('.copy-btn');
+        const originalHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+        copyBtn.style.color = '#28a745';
+        
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHTML;
+            copyBtn.style.color = '';
+        }, 2000);
+    });
+}
+</script>
+{% endblock %} 

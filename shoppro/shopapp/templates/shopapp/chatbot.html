@@ -1,0 +1,461 @@
+{% extends 'shopapp/base.html' %}
+
+{% block content %}
+<button class="chatbot-toggler">
+    <i class="fas fa-comments"></i>
+</button>
+
+<div class="chatbot">
+    <div class="chat-header">
+        <div class="chat-title">
+            <i class="fas fa-robot"></i>
+            <span>Shopping Assistant</span>
+        </div>
+        <button class="close-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="chatbox" id="chatbox">
+        <div class="chat incoming">
+            <div class="chat-content">
+                <p>Hi there 👋<br>How can I help you today?</p>
+                <span class="chat-time">Now</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input">
+        <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
+        <div class="input-buttons">
+            <label for="imageInput" class="upload-btn">
+                <i class="fas fa-image"></i>
+            </label>
+            <input type="file" id="imageInput" accept="image/*" hidden>
+            <button id="sendBtn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.chatbot-toggler {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #FF4B91, #FF7676);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(255, 75, 145, 0.3);
+}
+
+.chatbot-toggler:hover {
+    transform: scale(1.1);
+}
+
+.chatbot {
+    position: fixed;
+    right: 40px;
+    bottom: 100px;
+    width: 420px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+    transform-origin: bottom right;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.chatbot.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.chat-header {
+    background: linear-gradient(45deg, #FF4B91, #FF7676);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+.chatbox {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.chat {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-content {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.chat-time {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.incoming {
+    align-items: flex-start;
+}
+
+.incoming .chat-content {
+    background: #f0f2f5;
+    color: #000;
+}
+
+.outgoing {
+    align-items: flex-end;
+}
+
+.outgoing .chat-content {
+    background: #FF4B91;
+    color: white;
+}
+
+.chat-input {
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.chat-input textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 20px;
+    resize: none;
+    font-size: 15px;
+    outline: none;
+    max-height: 120px;
+    transition: all 0.3s ease;
+}
+
+.input-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.upload-btn, #sendBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn {
+    background: #f0f2f5;
+    color: #555;
+}
+
+#sendBtn {
+    background: #FF4B91;
+    color: white;
+    border: none;
+}
+
+.upload-btn:hover, #sendBtn:hover {
+    transform: scale(1.1);
+}
+
+.store-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.store-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.store-name {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.store-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.status-available {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-limited {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.store-link {
+    color: #FF4B91;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.store-link:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 500px) {
+    .chatbot {
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    .chatbot-toggler {
+        right: 20px;
+        bottom: 20px;
+    }
+}
+</style>
+
+<script>
+const storeData = {
+    "lahore": [
+        { 
+            name: "Emporium Mall (Johar Town)",
+            address: "Emporium Mall, 2nd Floor, Johar Town, Lahore",
+            phone: "+92-321-1234567",
+            available: true,
+            link: "{% url 'store_detail' 1 %}"
+        },
+        { 
+            name: "The Forum Mall (Gulberg)",
+            address: "The Forum Mall, 3rd Floor, Gulberg III, Lahore",
+            phone: "+92-321-2345678",
+            available: true,
+            link: "{% url 'store_detail' 2 %}"
+        }
+    ],
+    "karachi": [
+        {
+            name: "Dolmen Mall (Clifton)",
+            address: "Dolmen Mall, 3rd Floor, Block 4, Clifton, Karachi",
+            phone: "+92-333-1234567",
+            available: true,
+            link: "{% url 'store_detail' 3 %}"
+        },
+        {
+            name: "Ocean Mall (DHA)",
+            address: "Ocean Mall, 2nd Floor, DHA Phase 6, Karachi",
+            phone: "+92-333-2345678",
+            available: true,
+            link: "{% url 'store_detail' 4 %}"
+        }
+    ],
+    "islamabad": [
+        {
+            name: "Centaurus Mall",
+            address: "Centaurus Mall, 3rd Floor, Jinnah Avenue, Islamabad",
+            phone: "+92-333-7654321",
+            available: true,
+            link: "{% url 'store_detail' 5 %}"
+        },
+        {
+            name: "Giga Mall",
+            address: "Giga Mall, 2nd Floor, DHA Phase 2, Islamabad",
+            phone: "+92-333-8765432",
+            available: true,
+            link: "{% url 'store_detail' 6 %}"
+        }
+    ]
+};
+
+const chatbotToggler = document.querySelector(".chatbot-toggler");
+const chatbot = document.querySelector(".chatbot");
+const closeBtn = document.querySelector(".close-btn");
+const chatbox = document.getElementById("chatbox");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
+const imageInput = document.getElementById("imageInput");
+
+// Toggle chatbot
+chatbotToggler.addEventListener("click", () => chatbot.classList.add("active"));
+closeBtn.addEventListener("click", () => chatbot.classList.remove("active"));
+
+// Format store information
+const formatStoreInfo = (store) => {
+    return `
+        <div class="store-card">
+            <div class="store-name">
+                ${store.name}
+                <span class="store-status ${store.available ? 'status-available' : 'status-limited'}">
+                    ${store.available ? 'Available' : 'Limited Stock'}
+                </span>
+            </div>
+            <div>${store.address}</div>
+            <div>${store.phone}</div>
+            <a href="${store.link}" class="store-link">View Store Details →</a>
+        </div>
+    `;
+};
+
+// Add message with timestamp
+const addMessage = (message, isBot = false, isImage = false) => {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `chat ${isBot ? 'incoming' : 'outgoing'}`;
+    
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    if (isImage) {
+        messageDiv.innerHTML = `
+            <div class="chat-content">
+                <img src="${message}" alt="Uploaded Image" style="max-width: 200px; border-radius: 10px;">
+                <span class="chat-time">${time}</span>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="chat-content">
+                <p>${message}</p>
+                <span class="chat-time">${time}</span>
+            </div>
+        `;
+    }
+    
+    chatbox.appendChild(messageDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+};
+
+// Handle user message
+const handleUserMessage = (message) => {
+    const lowerMessage = message.toLowerCase();
+    
+    // Greetings
+    if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
+        addMessage("Hello! How can I assist you today? 😊", true);
+        return;
+    }
+    
+    // Help requests
+    if (lowerMessage.includes("help") || lowerMessage.includes("need")) {
+        addMessage("I'll be happy to help! Are you looking for wedding clothes? Please let me know your city for store locations. 🛍️", true);
+        return;
+    }
+    
+    // Check for cities
+    const city = Object.keys(storeData).find(c => lowerMessage.includes(c));
+    if (city) {
+        let response = `Here are our stores in ${city.charAt(0).toUpperCase() + city.slice(1)}:`;
+        storeData[city].forEach(store => {
+            response += formatStoreInfo(store);
+        });
+        addMessage(response, true);
+        return;
+    }
+    
+    // Default response
+    addMessage("I can help you find the nearest store. Please let me know your city (Lahore, Karachi, Islamabad) 🏪", true);
+};
+
+// Send message
+const sendMessage = () => {
+    const message = userInput.value.trim();
+    if (message) {
+        addMessage(message);
+        handleUserMessage(message);
+        userInput.value = "";
+    }
+};
+
+// Event listeners
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// Handle image upload
+imageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            addMessage(event.target.result, false, true);
+            addMessage("I can see the product image. Please share your city name so I can help you find this in our stores! 📍", true);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Auto-resize textarea
+userInput.addEventListener("input", () => {
+    userInput.style.height = "auto";
+    userInput.style.height = (userInput.scrollHeight) + "px";
+});
+</script>
+{% endblock %} 

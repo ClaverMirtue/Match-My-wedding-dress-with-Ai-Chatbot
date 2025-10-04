@@ -1,0 +1,213 @@
+{% extends 'shopapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="about-container">
+    <!-- Hero Section -->
+    <div class="about-hero" data-aos="fade-up">
+        <h1>About Us</h1>
+        <p>Discover our story and mission</p>
+    </div>
+
+    <!-- Story Section -->
+    <div class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6" data-aos="fade-right">
+                    <img src="{% static 'images/about-sec.webp' %}" alt="Our Story" class="img-fluid rounded-3">
+                </div>
+                <div class="col-md-6" data-aos="fade-left">
+                    <h2>Our Story</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values Section -->
+    <div class="values-section">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">Our Values</h2>
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="value-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>Quality</h3>
+                        <p>We ensure the highest quality in all our products</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="value-card">
+                        <i class="fas fa-handshake"></i>
+                        <h3>Trust</h3>
+                        <p>Building long-lasting relationships with our customers</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="value-card">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Sustainability</h3>
+                        <p>Committed to environmental responsibility</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-section">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">Our Team</h2>
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-card">
+                        <img src="/static/images/team1.jpg" alt="Team Member">
+                        <h3>John Doe</h3>
+                        <p>Founder & CEO</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="team-card">
+                        <img src="/static/images/team2.jpg" alt="Team Member">
+                        <h3>Jane Smith</h3>
+                        <p>Creative Director</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="team-card">
+                        <img src="/static/images/team3.jpg" alt="Team Member">
+                        <h3>Mike Johnson</h3>
+                        <p>Head of Operations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.about-hero {
+    height: 400px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.about-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.about-hero p {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.about-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.about-section h2 {
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+}
+
+.about-section p {
+    color: #666;
+    line-height: 1.8;
+}
+
+.values-section {
+    padding: 4rem 0;
+}
+
+.value-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-10px);
+}
+
+.value-card i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.value-card h3 {
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+}
+
+.value-card p {
+    color: #666;
+    margin: 0;
+}
+
+.team-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.team-card {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.team-card img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.team-card h3 {
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.team-card p {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .about-hero {
+        height: 300px;
+    }
+
+    .about-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .about-hero p {
+        font-size: 1.2rem;
+    }
+
+    .about-section .col-md-6:first-child {
+        margin-bottom: 2rem;
+    }
+
+    .value-card {
+        margin-bottom: 2rem;
+    }
+}
+</style>
+{% endblock %} 

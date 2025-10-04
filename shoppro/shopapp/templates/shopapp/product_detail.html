@@ -1,0 +1,683 @@
+{% extends 'shopapp/base.html' %}
+
+{% block content %}
+<!-- Product Detail Section -->
+<div class="product-detail-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper mb-4" data-aos="fade-down">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'category_products' product.category.id %}">{{ product.category.name }}</a></li>
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <!-- Product Images Gallery -->
+        <div class="col-lg-6 mb-4" data-aos="fade-right">
+            <div class="product-gallery">
+                <div class="main-image-wrapper mb-3">
+                    <img src="{{ product.image.url }}" class="main-image" alt="{{ product.name }}" id="mainImage">
+                    <div class="image-overlay">
+                        <button class="zoom-btn" onclick="openZoomModal()">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="thumbnail-gallery">
+                    <div class="thumbnail active" onclick="changeImage(this, '{{ product.image.url }}')">
+                        <img src="{{ product.image.url }}" alt="Main Image">
+                    </div>
+                    {% for image in product_images %}
+                    <div class="thumbnail" onclick="changeImage(this, '{{ image.image.url }}')">
+                        <img src="{{ image.image.url }}" alt="Product Image {{ forloop.counter }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="product-info">
+                <h1 class="product-title">{{ product.name }}</h1>
+                <div class="product-meta">
+                    <div class="price">Rs. {{ product.price }}</div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(4.5/5)</span>
+                    </div>
+                </div>
+
+                <div class="product-description">
+                    <h3>Product Description</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+
+                <div class="product-features">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Premium Quality Fabric</li>
+                        <li><i class="fas fa-check-circle"></i> Custom Fitting Available</li>
+                        <li><i class="fas fa-check-circle"></i> Elegant Design</li>
+                        <li><i class="fas fa-check-circle"></i> Comfortable Wear</li>
+                    </ul>
+                </div>
+
+                <div class="product-actions">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-lg add-to-cart-btn">
+                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login to Buy
+                        </a>
+                    {% endif %}
+                    <button class="btn btn-outline-primary btn-lg wishlist-btn">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+
+                <div class="delivery-info">
+                    <div class="delivery-item">
+                        <i class="fas fa-truck"></i>
+                        <span>Free Delivery</span>
+                    </div>
+                    <div class="delivery-item">
+                        <i class="fas fa-undo"></i>
+                        <span>7 Days Return</span>
+                    </div>
+                    <div class="delivery-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Quality Assured</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="related-products mt-5" data-aos="fade-up">
+        <h2 class="section-title">Related Products</h2>
+        <div class="row">
+            {% for related_product in related_products %}
+            <div class="col-md-3 mb-4">
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="{{ related_product.image.url }}" class="product-image" alt="{{ related_product.name }}">
+                        <div class="product-overlay">
+                            <div class="overlay-content">
+                                <a href="{% url 'product_detail' related_product.id %}" class="btn btn-light btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">{{ related_product.name }}</h3>
+                        <div class="product-price">Rs. {{ related_product.price }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- After product info section -->
+    <div class="reviews-section mt-5">
+        <h2 class="section-title">Customer Reviews</h2>
+        
+        <!-- Average Rating -->
+        <div class="average-rating text-center mb-4">
+            <div class="rating-number">{{ avg_rating }}/5</div>
+            <div class="stars">
+                {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= avg_rating %}
+                        <i class="fas fa-star"></i>
+                    {% elif forloop.counter <= avg_rating|add:"0.5" %}
+                        <i class="fas fa-star-half-alt"></i>
+                    {% else %}
+                        <i class="far fa-star"></i>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="total-reviews">Based on {{ reviews.count }} reviews</div>
+        </div>
+
+        <!-- Add Review Form -->
+        {% if has_purchased and not user_has_reviewed %}
+        <div class="add-review-form mb-4" data-aos="fade-up">
+            <h3>Write a Review</h3>
+            <form method="post" action="{% url 'add_review' product.id %}">
+                {% csrf_token %}
+                <div class="rating-input mb-3">
+                    <label>Your Rating:</label>
+                    <div class="star-rating">
+                        {% for i in "12345"|make_list %}
+                        <input type="radio" name="rating" value="{{ forloop.counter }}" id="star{{ forloop.counter }}" required>
+                        <label for="star{{ forloop.counter }}"><i class="far fa-star"></i></label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Your Review:</label>
+                    <textarea name="comment" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Reviews List -->
+        <div class="reviews-list">
+            {% for review in reviews %}
+            <div class="review-card" data-aos="fade-up">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="reviewer-name">{{ review.user.username }}</span>
+                    </div>
+                    <div class="review-rating">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="review-content">
+                    <p>{{ review.comment }}</p>
+                </div>
+                <div class="review-footer">
+                    <span class="review-date">{{ review.created_at|date:"F d, Y" }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-reviews text-center py-4">
+                <i class="far fa-comment-dots fa-3x mb-3"></i>
+                <p>No reviews yet. Be the first to review this product!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Zoom Modal -->
+<div class="modal fade" id="zoomModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}" id="zoomImage">
+            </div>
+            <div class="modal-footer">
+                <div class="zoom-thumbnails">
+                    <div class="zoom-thumbnail active" onclick="changeZoomImage(this, '{{ product.image.url }}')">
+                        <img src="{{ product.image.url }}" alt="Main Image">
+                    </div>
+                    {% for image in product_images %}
+                    <div class="zoom-thumbnail" onclick="changeZoomImage(this, '{{ image.image.url }}')">
+                        <img src="{{ image.image.url }}" alt="Product Image {{ forloop.counter }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-detail-container {
+        padding: 2rem 0;
+    }
+
+    .breadcrumb-wrapper {
+        background: var(--light-color);
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .breadcrumb {
+        margin: 0;
+    }
+
+    /* Product Gallery */
+    .product-gallery {
+        background: white;
+        padding: 1rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .main-image-wrapper {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .main-image {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .main-image-wrapper:hover .image-overlay {
+        opacity: 1;
+    }
+
+    .zoom-btn {
+        background: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .zoom-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .thumbnail-gallery {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .thumbnail {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
+
+    .thumbnail.active {
+        opacity: 1;
+        border: 2px solid var(--primary-color);
+    }
+
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .thumbnail:hover {
+        opacity: 1;
+    }
+
+    /* Product Info */
+    .product-info {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--dark-color);
+    }
+
+    .product-meta {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .price {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .rating {
+        color: #ffc107;
+    }
+
+    .product-description {
+        margin-bottom: 2rem;
+    }
+
+    .product-features ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .product-features li {
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .product-features i {
+        color: var(--primary-color);
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .add-to-cart-btn {
+        flex: 1;
+    }
+
+    .wishlist-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .wishlist-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .delivery-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #eee;
+    }
+
+    .delivery-item {
+        text-align: center;
+    }
+
+    .delivery-item i {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .delivery-item span {
+        display: block;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    /* Related Products */
+    .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--dark-color);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .product-gallery, .product-info {
+        animation: fadeIn 1s ease-out;
+    }
+
+    .zoom-thumbnails {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding: 1rem;
+    }
+
+    .zoom-thumbnail {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
+
+    .zoom-thumbnail.active {
+        opacity: 1;
+        border: 2px solid var(--primary-color);
+    }
+
+    .zoom-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .modal-body {
+        padding: 0;
+        position: relative;
+    }
+
+    .modal-body .btn-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: white;
+        border-radius: 50%;
+        padding: 1rem;
+    }
+
+    .modal-body img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Reviews Section Styling */
+    .reviews-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .average-rating {
+        padding: 2rem;
+        background: var(--light-color);
+        border-radius: 15px;
+    }
+
+    .rating-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .stars {
+        font-size: 1.5rem;
+        color: #ffc107;
+        margin: 1rem 0;
+    }
+
+    .total-reviews {
+        color: #666;
+    }
+
+    /* Review Form Styling */
+    .add-review-form {
+        background: var(--light-color);
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 2rem 0;
+    }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        font-size: 1.5rem;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        cursor: pointer;
+        padding: 0 0.2rem;
+        color: #ddd;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+
+    /* Review Card Styling */
+    .review-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .review-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .reviewer-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .reviewer-info i {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+    }
+
+    .review-rating {
+        color: #ffc107;
+    }
+
+    .review-content {
+        color: #444;
+        line-height: 1.6;
+    }
+
+    .review-footer {
+        margin-top: 1rem;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .no-reviews {
+        color: #666;
+    }
+
+    .no-reviews i {
+        color: var(--primary-color);
+        opacity: 0.5;
+    }
+</style>
+
+<script>
+    // Thumbnail Gallery
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const mainImage = document.querySelector('.main-image');
+
+    thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', () => {
+            // Remove active class from all thumbnails
+            thumbnails.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked thumbnail
+            thumbnail.classList.add('active');
+            // Update main image
+            mainImage.src = thumbnail.querySelector('img').src;
+        });
+    });
+
+    // Zoom Modal
+    function openZoomModal() {
+        const modal = new bootstrap.Modal(document.getElementById('zoomModal'));
+        modal.show();
+    }
+
+    function changeImage(thumbnail, imageUrl) {
+        // Remove active class from all thumbnails
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        // Add active class to clicked thumbnail
+        thumbnail.classList.add('active');
+        // Update main image
+        document.getElementById('mainImage').src = imageUrl;
+        // Update zoom modal image
+        document.getElementById('zoomImage').src = imageUrl;
+    }
+
+    function changeZoomImage(thumbnail, imageUrl) {
+        // Remove active class from all zoom thumbnails
+        document.querySelectorAll('.zoom-thumbnail').forEach(t => t.classList.remove('active'));
+        // Add active class to clicked thumbnail
+        thumbnail.classList.add('active');
+        // Update zoom image
+        document.getElementById('zoomImage').src = imageUrl;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const starLabels = document.querySelectorAll('.star-rating label');
+        starLabels.forEach(label => {
+            label.addEventListener('mouseover', function() {
+                this.innerHTML = '<i class="fas fa-star"></i>';
+            });
+            label.addEventListener('mouseout', function() {
+                if (!this.previousElementSibling.checked) {
+                    this.innerHTML = '<i class="far fa-star"></i>';
+                }
+            });
+            label.addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-star"></i>';
+            });
+        });
+    });
+</script>
+{% endblock %} 

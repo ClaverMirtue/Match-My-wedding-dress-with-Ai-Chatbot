@@ -1,0 +1,277 @@
+{% extends 'shopapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="store-detail-container">
+    <!-- Store Header -->
+    <div class="store-header" data-aos="fade-down">
+        <div class="store-info">
+            {% if store_id == 5 %}
+            <h1>Centaurus Mall</h1>
+            {% elif store_id == 6 %}
+            <h1>Giga Mall</h1>
+            {% endif %}
+            <div class="store-meta">
+                <span class="status available">
+                    <i class="fas fa-check-circle"></i> Open Now
+                </span>
+                <span class="rating">
+                    <i class="fas fa-star"></i> 4.7/5
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Content -->
+    <div class="row mt-5">
+        <!-- Store Details -->
+        <div class="col-md-8" data-aos="fade-right">
+            <div class="store-section">
+                <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                {% if store_id == 5 %}
+                <p>Centaurus Mall, 3rd Floor, Jinnah Avenue, Islamabad, Pakistan</p>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.1234567890123!2d73.0123456!3d33.7890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38df9483c3c0c0c0%3A0x1234567890abcdef!2sCentaurus%20Mall!5e0!3m2!1sen!2s!4v1234567890!5m2!1sen!2s" 
+                        width="100%" 
+                        height="300" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+                {% elif store_id == 6 %}
+                <p>Giga Mall, 2nd Floor, DHA Phase 2, Islamabad, Pakistan</p>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.234567890123!2d73.0234567!3d33.8901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38df9483c3c0c0c0%3A0x1234567890abcdef!2sGiga%20Mall!5e0!3m2!1sen!2s!4v1234567890!5m2!1sen!2s" 
+                        width="100%" 
+                        height="300" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="store-section">
+                <h3><i class="fas fa-clock"></i> Working Hours</h3>
+                <div class="working-hours">
+                    <div class="day-row">
+                        <span>Monday - Friday</span>
+                        <span>10:00 AM - 10:00 PM</span>
+                    </div>
+                    <div class="day-row">
+                        <span>Saturday</span>
+                        <span>10:00 AM - 10:00 PM</span>
+                    </div>
+                    <div class="day-row">
+                        <span>Sunday</span>
+                        <span>10:00 AM - 10:00 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-section">
+                <h3><i class="fas fa-tshirt"></i> Available Collections</h3>
+                <div class="collections">
+                    <div class="collection-item">
+                        <img src="{% static 'images/collections/bridal.jpg' %}" alt="Bridal Collection">
+                        <h4>Bridal Collection</h4>
+                    </div>
+                    <div class="collection-item">
+                        <img src="{% static 'images/collections/groom.jpg' %}" alt="Groom Collection">
+                        <h4>Groom Collection</h4>
+                    </div>
+                    <div class="collection-item">
+                        <img src="{% static 'images/collections/party.jpg' %}" alt="Party Wear">
+                        <h4>Party Wear</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact & Services -->
+        <div class="col-md-4" data-aos="fade-left">
+            <div class="contact-card">
+                <h3>Contact Information</h3>
+                <div class="contact-info">
+                    {% if store_id == 5 %}
+                    <p><i class="fas fa-phone"></i> +92-333-7654321</p>
+                    <p><i class="fas fa-envelope"></i> centaurus@weddingcollection.com</p>
+                    {% elif store_id == 6 %}
+                    <p><i class="fas fa-phone"></i> +92-333-8765432</p>
+                    <p><i class="fas fa-envelope"></i> giga@weddingcollection.com</p>
+                    {% endif %}
+                    <p><i class="fas fa-globe"></i> www.weddingcollection.com</p>
+                </div>
+                <div class="contact-buttons">
+                    {% if store_id == 5 %}
+                    <a href="tel:+923337654321" class="btn btn-primary">
+                        <i class="fas fa-phone"></i> Call Now
+                    </a>
+                    <a href="https://wa.me/923337654321" class="btn btn-success">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    {% elif store_id == 6 %}
+                    <a href="tel:+923338765432" class="btn btn-primary">
+                        <i class="fas fa-phone"></i> Call Now
+                    </a>
+                    <a href="https://wa.me/923338765432" class="btn btn-success">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="services-card">
+                <h3>Services</h3>
+                <ul class="services-list">
+                    <li><i class="fas fa-check"></i> Custom Tailoring</li>
+                    <li><i class="fas fa-check"></i> Bridal Consultation</li>
+                    <li><i class="fas fa-check"></i> Alteration Services</li>
+                    <li><i class="fas fa-check"></i> Home Delivery</li>
+                    <li><i class="fas fa-check"></i> Wedding Planning Assistance</li>
+                    <li><i class="fas fa-check"></i> Free Parking</li>
+                    <li><i class="fas fa-check"></i> Air Conditioned</li>
+                    <li><i class="fas fa-check"></i> Food Court Nearby</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.store-detail-container {
+    padding: 2rem 0;
+}
+
+.store-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    color: white;
+    text-align: center;
+}
+
+.store-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.status, .rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.store-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.store-section h3 {
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.map-container {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.working-hours {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.day-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.collections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.collection-item {
+    text-align: center;
+}
+
+.collection-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.contact-card, .services-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.contact-info {
+    margin: 1.5rem 0;
+}
+
+.contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.contact-buttons {
+    display: grid;
+    gap: 1rem;
+}
+
+.services-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.services-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.services-list li i {
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .store-meta {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .contact-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %} 

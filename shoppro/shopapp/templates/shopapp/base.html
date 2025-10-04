@@ -1,0 +1,1114 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wedding Clothes Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF4B91;
+            --secondary-color: #FF7676;
+            --accent-color: #FFB4B4;
+            --dark-color: #2D3250;
+            --light-color: #FFF5E4;
+        }
+
+        /* Global Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover:before {
+            visibility: visible;
+            width: 100%;
+        }
+
+        /* Card Styling */
+        .card {
+            border: none;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255,75,145,0.2);
+        }
+
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,75,145,0.3);
+        }
+
+        .btn-outline-light {
+            border-width: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background: linear-gradient(135deg, var(--dark-color), var(--primary-color));
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .footer-section p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            margin: 0 10px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        /* Alert Styling */
+        .alert {
+            border: none;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Custom Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: none;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+        }
+
+        .chat-bot-button {
+            /* Remove this entire style block */
+        }
+
+        .button-content {
+            /* Remove this entire style block */
+        }
+
+        .chat-label {
+            /* Remove this entire style block */
+        }
+
+        .pulse {
+            /* Remove this entire style block */
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .chat-bot-button {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .chat-bot-button i {
+                font-size: 20px;
+            }
+
+            .chat-bot-button:hover {
+                width: 140px;
+            }
+        }
+
+        /* Add notification badge */
+        .chat-bot-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: 2px solid white;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Add floating animation */
+        .chat-bot-button {
+            animation: none;
+        }
+
+        /* Logo Animation Styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+            animation: sparkle 2s infinite;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.3),
+                transparent
+            );
+            animation: shine 3s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+            50% {
+                left: 100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .search-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-group:focus-within {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 8px 15px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-input-group:focus-within .search-input {
+            color: var(--dark-color);
+        }
+
+        .search-input-group:focus-within .search-input::placeholder {
+            color: #999;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-group:focus-within .search-btn {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transform: translateX(-5px);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            margin-top: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .suggestion-header {
+            padding: 15px;
+            color: #666;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-items {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: #f8f9fa;
+        }
+
+        .suggestion-item i {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 992px) {
+            .search-container {
+                margin: 1rem 0;
+                order: 3;
+                max-width: 100%;
+            }
+        }
+
+        /* Chatbot Styles */
+        .chatbot {
+            position: fixed;
+            right: 30px;
+            bottom: 90px;
+            width: 350px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .chatbot.active {
+            transform: scale(1);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .chatbox {
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .chat {
+            margin: 10px 0;
+        }
+
+        .chat.incoming {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .chat.outgoing {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .chat-content {
+            max-width: 75%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .incoming .chat-content {
+            background: #f0f0f0;
+        }
+
+        .outgoing .chat-content {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .chat-time {
+            font-size: 0.7rem;
+            color: #777;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .outgoing .chat-time {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            resize: none;
+            max-height: 100px;
+            font-size: 0.95rem;
+        }
+
+        .input-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .upload-btn, #sendBtn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+        }
+
+        .store-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+
+        .store-name {
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .store-status {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .status-available {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-limited {
+            background: #FFC107;
+            color: black;
+        }
+
+        .store-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .chatbot-toggler {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .chatbot-toggler:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .chatbot {
+                right: 10px;
+                bottom: 70px;
+                width: calc(100% - 20px);
+                border-radius: 15px;
+            }
+
+            .chatbot-toggler {
+                right: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top" data-aos="fade-down">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <div class="logo-container">
+                    <i class="fas fa-ring logo-icon"></i>
+                    <span class="logo-text">Wedding Clothes </span>
+                </div>
+            </a>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <form class="search-form" action="{% url 'search' %}" method="GET">
+                    <div class="search-input-group">
+                        <input type="text" name="q" class="search-input" placeholder="Search products..." required>
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="search-suggestions" style="display: none;">
+                        <div class="suggestion-header">
+                            <i class="fas fa-history"></i>
+                            <span>Recent Searches</span>
+                        </div>
+                        <div class="suggestion-items"></div>
+                    </div>
+                </form>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'cart' %}">
+                            <i class="fas fa-shopping-cart me-1"></i>Cart
+                        </a>
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            <i class="fas fa-user me-1"></i>Profile
+                        </a>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link border-0 bg-transparent">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a class="nav-link" href="{% url 'register' %}">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" data-aos="fade-up">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-md-4 footer-section" data-aos="fade-up">
+                        <h3>About Us</h3>
+                        <p>We bring you the finest wedding attire collection. Make your special day even more memorable with our exclusive designs and premium quality fabrics.</p>
+                    </div>
+                    <div class="col-md-4 footer-section" data-aos="fade-up" data-aos-delay="100">
+                        <h3>Contact Info</h3>
+                        <p>
+                            <i class="fas fa-phone me-2"></i> +1234567890<br>
+                            <i class="fas fa-envelope me-2"></i> info@weddingshop.com<br>
+                            <i class="fas fa-map-marker-alt me-2"></i> 123 Wedding Street, Fashion City
+                        </p>
+                    </div>
+                    <div class="col-md-4 footer-section" data-aos="fade-up" data-aos-delay="200">
+                        <h3>Follow Us</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <button class="chatbot-toggler">
+        <i class="fas fa-comments"></i>
+    </button>
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Scroll to Top functionality
+        const scrollTop = document.querySelector('.scroll-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 200) {
+                scrollTop.classList.add('active');
+            } else {
+                scrollTop.classList.remove('active');
+            }
+        });
+
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatButton = document.querySelector('.chat-bot-button');
+            
+            // Add bounce effect on page load
+            setTimeout(() => {
+                chatButton.style.animation = 'bounce 0.5s ease';
+            }, 1000);
+
+            // Add attention animation every 30 seconds
+            setInterval(() => {
+                chatButton.style.animation = 'attention 1s ease';
+                setTimeout(() => {
+                    chatButton.style.animation = 'float 6s ease-in-out infinite';
+                }, 1000);
+            }, 30000);
+        });
+
+        // Add these animations to your existing styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-20px); }
+                60% { transform: translateY(-10px); }
+            }
+
+            @keyframes attention {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatbotToggler = document.querySelector(".chatbot-toggler");
+            const chatbot = document.querySelector(".chatbot");
+            const closeBtn = document.querySelector(".close-btn");
+            
+            // Toggle chatbot
+            chatbotToggler.addEventListener("click", () => {
+                chatbot.classList.add("active");
+            });
+            
+            closeBtn.addEventListener("click", () => {
+                chatbot.classList.remove("active");
+            });
+            
+            // Add rest of your chatbot JavaScript here
+        });
+    </script>
+    <div class="chatbot">
+        <div class="chat-header">
+            <div class="chat-title">
+                <i class="fas fa-robot"></i>
+                <span>Shopping Assistant</span>
+            </div>
+            <button class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    
+        <div class="chatbox" id="chatbox">
+            <div class="chat incoming">
+                <div class="chat-content">
+                    <p>Hi there 👋<br>How can I help you today?</p>
+                    <span class="chat-time">Now</span>
+                </div>
+            </div>
+        </div>
+    
+        <div class="chat-input">
+            <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
+            <div class="input-buttons">
+                <label for="imageInput" class="upload-btn">
+                    <i class="fas fa-image"></i>
+                </label>
+                <input type="file" id="imageInput" accept="image/*" hidden>
+                <button id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    const storeData = {
+        "lahore": [
+            { 
+                name: "Fashion Store Lahore",
+                address: "123 Mall Road, Lahore",
+                phone: "+92-321-1234567",
+                available: true,
+                link: "{% url 'store_detail' 1 %}"
+            },
+            { 
+                name: "Wedding Collection",
+                address: "45 Liberty Market, Lahore",
+                phone: "+92-321-7654321",
+                available: true,
+                link: "{% url 'store_detail' 2 %}"
+            }
+        ],
+        "karachi": [
+            {
+                name: "Bridal Gallery",
+                address: "78 Tariq Road, Karachi",
+                phone: "+92-333-1234567",
+                available: true,
+                link: "{% url 'store_detail' 3 %}"
+            }
+        ],
+        "islamabad": [
+            {
+                name: "Royal Wedding Wear",
+                address: "90 Blue Area, Islamabad",
+                phone: "+92-333-7654321",
+                available: true,
+                link: "{% url 'store_detail' 4 %}"
+            }
+        ]
+    };
+    
+    const chatbotToggler = document.querySelector(".chatbot-toggler");
+    const chatbot = document.querySelector(".chatbot");
+    const closeBtn = document.querySelector(".close-btn");
+    const chatbox = document.getElementById("chatbox");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const imageInput = document.getElementById("imageInput");
+    
+    // Toggle chatbot
+    chatbotToggler.addEventListener("click", () => chatbot.classList.add("active"));
+    closeBtn.addEventListener("click", () => chatbot.classList.remove("active"));
+    
+    // Format store information
+    const formatStoreInfo = (store) => {
+        return `
+            <div class="store-card">
+                <div class="store-name">
+                    ${store.name}
+                    <span class="store-status ${store.available ? 'status-available' : 'status-limited'}">
+                        ${store.available ? 'Available' : 'Limited Stock'}
+                    </span>
+                </div>
+                <div>${store.address}</div>
+                <div>${store.phone}</div>
+                <a href="${store.link}" class="store-link">View Store Details →</a>
+            </div>
+        `;
+    };
+    
+    // Add message with timestamp
+    const addMessage = (message, isBot = false, isImage = false) => {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `chat ${isBot ? 'incoming' : 'outgoing'}`;
+        
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        if (isImage) {
+            messageDiv.innerHTML = `
+                <div class="chat-content">
+                    <img src="${message}" alt="Uploaded Image" style="max-width: 200px; border-radius: 10px;">
+                    <span class="chat-time">${time}</span>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="chat-content">
+                    <p>${message}</p>
+                    <span class="chat-time">${time}</span>
+                </div>
+            `;
+        }
+        
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;
+    };
+    
+    // Handle user message
+    const handleUserMessage = (message) => {
+        const lowerMessage = message.toLowerCase();
+        
+        // Greetings
+        if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
+            addMessage("Hello! How can I assist you today? 😊", true);
+            return;
+        }
+        
+        // Help requests
+        if (lowerMessage.includes("help") || lowerMessage.includes("need")) {
+            addMessage("I'll be happy to help! Are you looking for wedding clothes? Please let me know your city for store locations. 🛍️", true);
+            return;
+        }
+        
+        // Check for cities
+        const city = Object.keys(storeData).find(c => lowerMessage.includes(c));
+        if (city) {
+            let response = `Here are our stores in ${city.charAt(0).toUpperCase() + city.slice(1)}:`;
+            storeData[city].forEach(store => {
+                response += formatStoreInfo(store);
+            });
+            addMessage(response, true);
+            return;
+        }
+        
+        // Default response
+        addMessage("I can help you find the nearest store. Please let me know your city (Lahore, Karachi, Islamabad) 🏪", true);
+    };
+    
+    // Send message
+    const sendMessage = () => {
+        const message = userInput.value.trim();
+        if (message) {
+            addMessage(message);
+            handleUserMessage(message);
+            userInput.value = "";
+        }
+    };
+    
+    // Event listeners
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // Handle image upload
+    imageInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                addMessage(event.target.result, false, true);
+                addMessage("I can see the product image. Please share your city name so I can help you find this in our stores! 📍", true);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Auto-resize textarea
+    userInput.addEventListener("input", () => {
+        userInput.style.height = "auto";
+        userInput.style.height = (userInput.scrollHeight) + "px";
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('.search-input');
+        const suggestions = document.querySelector('.search-suggestions');
+        const suggestionItems = document.querySelector('.suggestion-items');
+        
+        // Show/hide suggestions
+        searchInput.addEventListener('focus', () => {
+            suggestions.style.display = 'block';
+            loadRecentSearches();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!suggestions.contains(e.target) && e.target !== searchInput) {
+                suggestions.style.display = 'none';
+            }
+        });
+
+        // Load recent searches from localStorage
+        function loadRecentSearches() {
+            const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+            suggestionItems.innerHTML = searches.map(search => `
+                <div class="suggestion-item">
+                    <i class="fas fa-history"></i>
+                    <span>${search}</span>
+                </div>
+            `).join('');
+        }
+
+        // Save search to localStorage
+        document.querySelector('.search-form').addEventListener('submit', (e) => {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+                const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+                if (!searches.includes(searchTerm)) {
+                    searches.unshift(searchTerm);
+                    if (searches.length > 5) searches.pop();
+                    localStorage.setItem('recentSearches', JSON.stringify(searches));
+                }
+            }
+        });
+
+        // Click on suggestion
+        suggestionItems.addEventListener('click', (e) => {
+            const item = e.target.closest('.suggestion-item');
+            if (item) {
+                searchInput.value = item.querySelector('span').textContent;
+                document.querySelector('.search-form').submit();
+            }
+        });
+    });
+    </script>
+
+</body>
+</html> 

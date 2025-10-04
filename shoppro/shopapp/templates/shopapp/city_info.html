@@ -1,0 +1,228 @@
+{% extends 'shopapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="city-info-container">
+    <!-- City Header -->
+    <div class="city-header" data-aos="fade-down">
+        <div class="city-info">
+            {% if city == 'karachi' %}
+            <h1>Karachi Stores</h1>
+            <p class="city-description">Discover our premium stores in the heart of Karachi</p>
+            {% elif city == 'lahore' %}
+            <h1>Lahore Stores</h1>
+            <p class="city-description">Experience luxury shopping in the cultural capital</p>
+            {% elif city == 'islamabad' %}
+            <h1>Islamabad Stores</h1>
+            <p class="city-description">Find our exclusive collections in the capital city</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Stores Grid -->
+    <div class="stores-grid">
+        {% if city == 'karachi' %}
+        <!-- Karachi Stores -->
+        <div class="store-card" data-aos="fade-up">
+            <div class="store-image">
+                <img src="{% static 'images/stores/dolmen.jpg' %}" alt="Dolmen Mall">
+            </div>
+            <div class="store-content">
+                <h3>Dolmen Mall (Clifton)</h3>
+                <p class="store-location"><i class="fas fa-map-marker-alt"></i> Dolmen Mall, 3rd Floor, Block 4, Clifton</p>
+                <p class="store-phone"><i class="fas fa-phone"></i> +92-333-1234567</p>
+                <div class="store-features">
+                    <span><i class="fas fa-parking"></i> Free Parking</span>
+                    <span><i class="fas fa-snowflake"></i> Air Conditioned</span>
+                    <span><i class="fas fa-utensils"></i> Food Court</span>
+                </div>
+                <a href="/store/3/" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+
+        <div class="store-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="store-image">
+                <img src="{% static 'images/stores/ocean.jpg' %}" alt="Ocean Mall">
+            </div>
+            <div class="store-content">
+                <h3>Ocean Mall (DHA)</h3>
+                <p class="store-location"><i class="fas fa-map-marker-alt"></i> Ocean Mall, 2nd Floor, DHA Phase 6</p>
+                <p class="store-phone"><i class="fas fa-phone"></i> +92-333-2345678</p>
+                <div class="store-features">
+                    <span><i class="fas fa-parking"></i> Free Parking</span>
+                    <span><i class="fas fa-snowflake"></i> Air Conditioned</span>
+                    <span><i class="fas fa-utensils"></i> Food Court</span>
+                </div>
+                <a href="/store/4/" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+
+        {% elif city == 'lahore' %}
+        <!-- Lahore Stores -->
+        <div class="store-card" data-aos="fade-up">
+            <div class="store-image">
+                <img src="{% static 'images/stores/emporium.jpg' %}" alt="Emporium Mall">
+            </div>
+            <div class="store-content">
+                <h3>Emporium Mall (Johar Town)</h3>
+                <p class="store-location"><i class="fas fa-map-marker-alt"></i> Emporium Mall, 2nd Floor, Johar Town</p>
+                <p class="store-phone"><i class="fas fa-phone"></i> +92-321-1234567</p>
+                <div class="store-features">
+                    <span><i class="fas fa-parking"></i> Free Parking</span>
+                    <span><i class="fas fa-snowflake"></i> Air Conditioned</span>
+                    <span><i class="fas fa-utensils"></i> Food Court</span>
+                </div>
+                <a href="/store/1/" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+
+        <div class="store-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="store-image">
+                <img src="{% static 'images/stores/forum.jpg' %}" alt="The Forum Mall">
+            </div>
+            <div class="store-content">
+                <h3>The Forum Mall (Gulberg)</h3>
+                <p class="store-location"><i class="fas fa-map-marker-alt"></i> The Forum Mall, 3rd Floor, Gulberg III</p>
+                <p class="store-phone"><i class="fas fa-phone"></i> +92-321-2345678</p>
+                <div class="store-features">
+                    <span><i class="fas fa-parking"></i> Free Parking</span>
+                    <span><i class="fas fa-snowflake"></i> Air Conditioned</span>
+                    <span><i class="fas fa-utensils"></i> Food Court</span>
+                </div>
+                <a href="/store/2/" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+
+        {% elif city == 'islamabad' %}
+        <!-- Islamabad Stores -->
+        <div class="store-card" data-aos="fade-up">
+            <div class="store-image">
+                <img src="{% static 'images/stores/centaurus.jpg' %}" alt="Centaurus Mall">
+            </div>
+            <div class="store-content">
+                <h3>Centaurus Mall</h3>
+                <p class="store-location"><i class="fas fa-map-marker-alt"></i> Centaurus Mall, 3rd Floor, Jinnah Avenue</p>
+                <p class="store-phone"><i class="fas fa-phone"></i> +92-333-7654321</p>
+                <div class="store-features">
+                    <span><i class="fas fa-parking"></i> Free Parking</span>
+                    <span><i class="fas fa-snowflake"></i> Air Conditioned</span>
+                    <span><i class="fas fa-utensils"></i> Food Court</span>
+                </div>
+                <a href="/store/5/" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+
+        <div class="store-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="store-image">
+                <img src="{% static 'images/stores/giga.jpg' %}" alt="Giga Mall">
+            </div>
+            <div class="store-content">
+                <h3>Giga Mall</h3>
+                <p class="store-location"><i class="fas fa-map-marker-alt"></i> Giga Mall, 2nd Floor, DHA Phase 2</p>
+                <p class="store-phone"><i class="fas fa-phone"></i> +92-333-8765432</p>
+                <div class="store-features">
+                    <span><i class="fas fa-parking"></i> Free Parking</span>
+                    <span><i class="fas fa-snowflake"></i> Air Conditioned</span>
+                    <span><i class="fas fa-utensils"></i> Food Court</span>
+                </div>
+                <a href="/store/6/" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.city-info-container {
+    padding: 2rem 0;
+}
+
+.city-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    color: white;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.city-description {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    opacity: 0.9;
+}
+
+.stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.store-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.store-card:hover {
+    transform: translateY(-5px);
+}
+
+.store-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.store-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.store-content {
+    padding: 1.5rem;
+}
+
+.store-content h3 {
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+}
+
+.store-location, .store-phone {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.store-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.store-features span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+}
+
+.btn-primary {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .stores-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %} 

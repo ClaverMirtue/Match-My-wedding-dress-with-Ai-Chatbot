@@ -1,0 +1,302 @@
+{% extends 'shopapp/base.html' %}
+
+{% block content %}
+<div class="review-container">
+    <div class="review-header text-center mb-5" data-aos="fade-down">
+        <i class="fas fa-star-half-alt fa-3x mb-3 text-primary"></i>
+        <h2>Rate Your Purchase</h2>
+        <p>Thank you for shopping with us! Please take a moment to review your products.</p>
+    </div>
+
+    <div class="products-to-review">
+        {% for product in products %}
+        <div class="review-card" data-aos="fade-up" data-product-id="{{ product.id }}">
+            <div class="product-info">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                <div class="product-details">
+                    <h4>{{ product.name }}</h4>
+                    <p class="price">Rs. {{ product.price }}</p>
+                </div>
+            </div>
+
+            {% if request.session.reviewed_product_|add:product.id|stringformat:"s" in request.session %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Thank you for your review!
+                </div>
+            {% else %}
+                <form method="post" action="{% url 'add_review' product.id %}" class="review-form" id="reviewForm_{{ product.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="return_url" value="{{ request.get_full_path }}">
+                    <div class="rating-input mb-3">
+                        <label>Your Rating:</label>
+                        <div class="star-rating" id="starRating_{{ product.id }}">
+                            {% for i in "12345"|make_list %}
+                            <input type="radio" name="rating" value="{{ forloop.counter }}" id="star{{ forloop.counter }}_{{ product.id }}" required>
+                            <label for="star{{ forloop.counter }}_{{ product.id }}"><i class="far fa-star"></i></label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Your Review:</label>
+                        <textarea name="comment" class="form-control" rows="3" placeholder="Share your experience with this product..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit-review">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Review
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'profile' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Go to My Orders
+        </a>
+    </div>
+</div>
+
+<style>
+    .review-container {
+        padding: 2rem 0;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .review-header {
+        color: var(--dark-color);
+    }
+
+    .review-header i {
+        color: var(--primary-color);
+    }
+
+    .review-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-right: 1.5rem;
+    }
+
+    .product-details h4 {
+        margin: 0;
+        color: var(--dark-color);
+    }
+
+    .price {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        font-size: 1.5rem;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        cursor: pointer;
+        padding: 0 0.2rem;
+        color: #ddd;
+        transition: all 0.3s ease;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+
+    .review-form textarea {
+        border: 2px solid #eee;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .review-form textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(255,75,145,0.25);
+    }
+
+    @media (max-width: 576px) {
+        .product-info {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .product-image {
+            margin: 0 0 1rem 0;
+        }
+    }
+
+    .review-card.reviewed {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
+
+    .submit-review {
+        transition: all 0.3s ease;
+    }
+
+    .submit-review:hover {
+        transform: translateY(-2px);
+    }
+
+    .submit-review:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .fa-spinner {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        animation: slideIn 0.3s ease;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .star-rating label:hover {
+        transform: scale(1.2);
+        color: #ffc107;
+    }
+
+    .submit-review:disabled {
+        background-color: #ccc;
+        border-color: #ccc;
+        cursor: not-allowed;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Star rating functionality
+    const starRatings = document.querySelectorAll('.star-rating');
+    
+    starRatings.forEach(rating => {
+        const stars = rating.querySelectorAll('label');
+        const inputs = rating.querySelectorAll('input');
+        
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseover', () => {
+                for(let i = stars.length - 1; i >= index; i--) {
+                    stars[i].innerHTML = '<i class="fas fa-star"></i>';
+                }
+            });
+            
+            star.addEventListener('mouseout', () => {
+                stars.forEach((s, i) => {
+                    if (!inputs[i].checked) {
+                        s.innerHTML = '<i class="far fa-star"></i>';
+                    }
+                });
+            });
+            
+            star.addEventListener('click', () => {
+                inputs[index].checked = true;
+                for(let i = stars.length - 1; i >= index; i--) {
+                    stars[i].innerHTML = '<i class="fas fa-star"></i>';
+                }
+                for(let i = index - 1; i >= 0; i--) {
+                    stars[i].innerHTML = '<i class="far fa-star"></i>';
+                }
+            });
+        });
+    });
+
+    // Form submission
+    const forms = document.querySelectorAll('.review-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const rating = form.querySelector('input[name="rating"]:checked');
+            const comment = form.querySelector('textarea[name="comment"]').value;
+            
+            if (!rating) {
+                alert('Please select a rating');
+                return;
+            }
+            
+            if (!comment.trim()) {
+                alert('Please write a review');
+                return;
+            }
+            
+            const submitBtn = form.querySelector('.submit-review');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+            
+            form.submit();
+        });
+    });
+
+    // Show messages
+    {% if messages %}
+        {% for message in messages %}
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'alert alert-{{ message.tags }}';
+            messageDiv.innerHTML = '{{ message }}';
+            document.querySelector('.review-container').insertBefore(
+                messageDiv,
+                document.querySelector('.products-to-review')
+            );
+            setTimeout(() => messageDiv.remove(), 5000);
+        {% endfor %}
+    {% endif %}
+});
+</script>
+{% endblock %} 
